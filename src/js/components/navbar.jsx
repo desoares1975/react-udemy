@@ -1,7 +1,14 @@
 import React from 'react';
+import NavMenu from './nav-menu';
 
 class Navbar extends React.Component {
   render() {
+    let menu = [
+      {'title': 'Home', 'link': '#home'},
+      {'title': 'Sobre', 'link': '#about'},
+      {'title': 'Contato', 'link': '#link'}
+    ];
+
     let navClass = `nav-wrapper ${this.props.color}`;
 
     return (
@@ -9,11 +16,7 @@ class Navbar extends React.Component {
           <div className={navClass}>
             <div className="container">
               <a href="#" className="brand-logo">{this.props.title}</a>
-              <ul id="nav-mobile" className="right">
-                  <li><a href="sass.html">Sass</a></li>
-                  <li><a href="badges.html">Components</a></li>
-                  <li><a href="collapsible.html">JavaScript</a></li>
-              </ul>
+              <NavMenu menu={menu} />
             </div>
           </div>
         </nav>
