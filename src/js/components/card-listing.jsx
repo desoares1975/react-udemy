@@ -2,8 +2,17 @@ import React from 'react';
 import Card from './card';
 
 class CardListing extends React.Component {
-  render() {
+  constructor(props) {
+    super(props);
+    this.state = {'clicks': 0};
+    this.addClick = this.addClick.bind(this);
+  }
 
+  addClick() {
+    this.setState(current => ({'clicks': ++current.clicks}));
+  }
+
+  render() {
     let news = [
       {'title': 'Title 1', 'description': 'Description 1', 'detail': 'Some information about the image.', 'image': 'http://materializecss.com/images/sample-1.jpg', 'link': '#a'},
       {'title': 'Title 2', 'description': 'Description 2', 'detail': 'Some information about the image.', 'image': 'http://materializecss.com/images/office.jpg', 'link': '#b'},
@@ -31,7 +40,7 @@ class CardListing extends React.Component {
       return group.map((item, i) => {
         return (
           <div key={i} className={`col m${this.props.colSize}`}>
-            <Card data={item} />
+            <Card data={item} addClick={this.addClick} />
           </div>
         );
       });
@@ -40,13 +49,14 @@ class CardListing extends React.Component {
     let line = collection.map((group, i) => {
       return (
         <div key={i} className="row">
-          {cardsList(group)};
+          {cardsList(group, this)}
         </div>
       );
     })
 
     return (
       <div>
+        <p>Total clicks {this.state.clicks}</p>
         {line}
       </div>
     );
