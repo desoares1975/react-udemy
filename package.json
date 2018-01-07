@@ -9,11 +9,14 @@
   "author": "desoares1975",
   "license": "MIT",
   "devDependencies": {
+    "axios": "^0.17.1",
     "gulp": "^3.9.1",
     "gulp-react-easy": "^0.1.9",
     "gulp-rename": "^1.2.2"
   },
   "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
     "react": "^16.2.0",
     "react-dom": "^16.2.0"
   }

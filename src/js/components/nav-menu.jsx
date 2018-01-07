@@ -14,8 +14,10 @@ class NavMenu extends React.Component {
 
   render() {
     let list = this.props.menu.map(item => {
+
       return (
-        <li key={item.link} onClick={this.activate.bind(null, item.title, this)} className={this.state.activeMenu === item.title ? 'active' : ''}>
+        <li key={item.link} onClick={this.activate.bind(null, item.title, this)}
+          className={this.state.activeMenu === item.title ? 'active' : ''}>
           <a href={item.link}>{item.title}</a>
         </li>
       );

@@ -1,27 +1,59 @@
 import React from 'react';
 import Card from './card';
+import Search from './search'
+import Axios from 'axios';
 
 class CardListing extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {'clicks': 0};
+    this.state = {'search': '', 'clicks': 0, 'data': [], 'response': []};
     this.addClick = this.addClick.bind(this);
+    this.sendSearch = this.sendSearch.bind(this);
+    this.submit = this.submit.bind(this);
   }
 
   addClick() {
     this.setState(current => ({'clicks': ++current.clicks}));
   }
 
+  sendSearch(event) {
+    this.setState({'search': event.target.value});
+    if (!event.target.value) {
+      this.setState({'data': this.state.response});
+    }
+  }
+
+  submit() {
+    let filteredData = this.state.response.filter(item => {
+      for (let key in item) {
+        if (item[key].toLowerCase().indexOf(this.state.search.toLowerCase()) > -1) {
+          return true;
+        }
+      }
+
+      return false;
+    });
+
+    this.setState({'data': filteredData});
+
+    event.preventDefault();
+  }
+
+  componentDidMount() {
+    Axios.get('http://localhost:8808/data')
+    .then(res => {
+      this.setState({
+        'data': res.data,
+        'response': res.data
+      });
+    })
+    .catch(e => {
+      console.log(e);
+    })
+  }
+
   render() {
-    let news = [
-      {'title': 'Title 1', 'description': 'Description 1', 'detail': 'Some information about the image.', 'image': 'http://materializecss.com/images/sample-1.jpg', 'link': '#a'},
-      {'title': 'Title 2', 'description': 'Description 2', 'detail': 'Some information about the image.', 'image': 'http://materializecss.com/images/office.jpg', 'link': '#b'},
-      {'title': 'Title 3', 'description': 'Description 3', 'detail': 'Some information about the image.', 'image': 'http://materializecss.com/images/sample-1.jpg', 'link': '#c'},
-      {'title': 'Title 4', 'description': 'Description 4', 'detail': 'Some information about the image.', 'image': 'http://materializecss.com/images/office.jpg', 'link': '#d'},
-      {'title': 'Title 5', 'description': 'Description 5', 'detail': 'Some information about the image.', 'image': 'http://materializecss.com/images/sample-1.jpg', 'link': '#e'},
-      {'title': 'Title 6', 'description': 'Description 6', 'detail': 'Some information about the image.', 'image': 'http://materializecss.com/images/office.jpg', 'link': '#f'},
-      {'title': 'Title 7', 'description': 'Description 7', 'detail': 'Some information about the image.', 'image': 'http://materializecss.com/images/sample-1.jpg', 'link': '#g'}
-    ];
+    let news = this.state.data;
     let row = [];
     let last = news.length - 1;
     let cols = +this.props.colsPerRows;
@@ -56,6 +88,9 @@ class CardListing extends React.Component {
 
     return (
       <div>
+        <div className="row">
+          <Search sendSearch={this.sendSearch} search={this.state.search} submit={this.submit} />
+        </div>
         <p>Total clicks {this.state.clicks}</p>
         {line}
       </div>
